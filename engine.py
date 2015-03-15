@@ -28,10 +28,10 @@ class Application:
                 self.on_user_quit()
             elif e.type == SDL_KEYDOWN:
                 if e.key.windowID in self._windows:
-                    self._windows[e.key.windowID].on_key_press(SDL_GetKeyName(e.key.keysym.sym))
+                    self._windows[e.key.windowID].on_key_press(str(SDL_GetKeyName(e.key.keysym.sym), 'UTF-8'))
             elif e.type == SDL_KEYUP:
                 if e.key.windowID in self._windows:
-                    self._windows[e.key.windowID].on_key_release(SDL_GetKeyName(e.key.keysym.sym))
+                    self._windows[e.key.windowID].on_key_release(str(SDL_GetKeyName(e.key.keysym.sym), 'UTF-8'))
 
     def run_event_loop(self):
         while True:
