@@ -73,7 +73,7 @@ class Window:
     def size(self):
         w, h = c_int(), c_int()
         SDL_GetWindowSize(self._window, byref(w), byref(h))
-        return int(w), int(h)
+        return w.value, h.value
 
     @size.setter
     def size(self, size):
@@ -85,4 +85,3 @@ class Window:
 
     def on_key_release(self, key):
         pass
-
