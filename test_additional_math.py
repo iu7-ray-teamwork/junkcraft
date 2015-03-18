@@ -1,5 +1,6 @@
 import pytest
 import additional_math
+import math
 
 # Matrix tests
 @pytest.mark.parametrize("input,expected", [
@@ -32,10 +33,10 @@ def test_matrix_translate(input, expected):
 
 
 @pytest.mark.parametrize("input,expected", [
-    ( 90, [[0, 1],[-1, 0], [0, 0]] ),
-    ( 360, [[1, 0],[0, 1], [0, 0]] ),
-    ( 180, [[-1, 0],[0, -1], [0, 0]] ),
-    ( 270, [[0, -1],[1, 0], [0, 0]] )
+    ( math.pi/2, [[0, 1],[-1, 0], [0, 0]] ),
+    ( math.pi*2, [[1, 0],[0, 1], [0, 0]] ),
+    ( math.pi, [[-1, 0],[0, -1], [0, 0]] ),
+    ( 3*math.pi/2, [[0, -1],[1, 0], [0, 0]] )
 ])
 def test_matrix_rotate(input, expected):
     m = additional_math.Matrix.rotate(input)
