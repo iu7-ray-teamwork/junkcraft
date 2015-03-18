@@ -1,7 +1,7 @@
 import pytest
-
 import additional_math
 
+# Matrix tests
 @pytest.mark.parametrize("input,expected", [
     ([[0, 0], [0, 0], [0, 0]], True),
     ([[0], [0], [0]], False),
@@ -86,3 +86,89 @@ def test_matrix_not_equality(input, expected):
 def test_matrix_mul(input, expected):
     r = input[0]*input[1] == expected
     assert r
+
+
+#Vector tests
+def test_vector_init():
+    v = additional_math.Vector(10, 11)
+    assert v.x == 10 and v.y == 11
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(10, 10),
+       additional_math.Vector(10, 10)),
+       True ),
+    ( (additional_math.Vector(10, 10),
+       additional_math.Vector(11, 10)),
+       False ),
+    ( (additional_math.Vector(10, 10),
+       additional_math.Vector(10, 11)),
+       False ),
+
+])
+def test_vector_equality(input, expected):
+    assert (input[0] == input[1]) == expected
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(10, 10),
+       additional_math.Vector(10, 10)),
+       False ),
+    ( (additional_math.Vector(10, 10),
+       additional_math.Vector(11, 10)),
+       True ),
+    ( (additional_math.Vector(10, 10),
+       additional_math.Vector(10, 11)),
+       True ),
+
+])
+def test_vector_not_equality(input, expected):
+    assert (input[0] != input[1]) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(1, 2),
+       additional_math.Vector(3, 4)),
+       additional_math.Vector(4, 6) ),
+    ( (additional_math.Vector(1, 2),
+       additional_math.Vector(-3, 4)),
+       additional_math.Vector(-2, 6) ),
+
+])
+def test_vector_add(input, expected):
+    assert (input[0] + input[1]) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(1, 2),
+       10),
+       additional_math.Vector(10, 20) ),
+    ( (additional_math.Vector(7, 8),
+       additional_math.Matrix([[1, 2], [3, 4], [5, 6]])),
+       additional_math.Vector(36, 52) ),
+
+])
+def test_vector_mul(input, expected):
+    assert (input[0] * input[1]) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( additional_math.Vector(3, 4), 25 )
+])
+def test_vector_sqr_length(input, expected):
+    assert input.sqr_length == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( additional_math.Vector(3, 4), 5 )
+])
+def test_vector_length(input, expected):
+    assert input.length == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( additional_math.Vector(3, 5), 1 ),
+    ( additional_math.Vector(2, 1), 1 ),
+])
+def test_vector_normalized(input, expected):
+    v = input.normalized
+    assert abs(v.length - expected) <= 1e-7

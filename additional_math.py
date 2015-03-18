@@ -71,3 +71,43 @@ class Matrix:
         r[1][1] = self[1][0]*x[0][1] + self[1][1]*x[1][1]
         r[2][1] = self[2][0]*x[0][1] + self[2][1]*x[1][1] + x[2][1]
         return r
+
+
+class Vector:
+    def __init__(self, x=0, y=0):
+        self.x = x
+        self.y = y
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return not self == other
+
+    def __add__(self, other):
+        return Vector(self.x + other.x, self.y + other.y)
+
+    def __mul__(self, other):
+        if isinstance(other, Matrix):
+            x = self.x*other[0][0] + self.y*other[1][0] + other[2][0]
+            y = self.x*other[0][1] + self.y*other[1][1] + other[2][1]
+            return Vector(x, y)
+        if isinstance(other, (int, float, complex)):
+            return other * self
+        else:
+            raise ValueError
+
+    def __rmul__(self, other):
+        return Vector(self.x * other, self.y * other)
+
+    @property
+    def sqr_length(self):
+        return self.x**2 + self.y**2
+
+    @property
+    def length(self):
+        return math.sqrt(self.sqr_length)
+
+    @property
+    def normalized(self):
+        return Vector(self.x / self.length, self.y / self.length)
