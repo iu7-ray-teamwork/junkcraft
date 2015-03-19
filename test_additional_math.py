@@ -28,8 +28,7 @@ def test_matrix_init_with_list(input, expected):
 ])
 def test_matrix_translate(input, expected):
     r = additional_math.Matrix.translate(*input)
-    r = [r[0], r[1], r[2]]
-    assert r == expected
+    assert r == additional_math.Matrix(expected)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -40,9 +39,9 @@ def test_matrix_translate(input, expected):
 ])
 def test_matrix_rotate(input, expected):
     m = additional_math.Matrix.rotate(input)
-    for i in range(3):
-        for j in range(2):
-            assert abs(expected[i][j] - m[i][j]) <= 1e-5
+    for i in range(m.size[0]):
+        for j in range(m.size[1]):
+            assert abs(expected[i][j] - m[i, j]) <= 1e-5
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -50,8 +49,7 @@ def test_matrix_rotate(input, expected):
 ])
 def test_matrix_scale(input, expected):
     r = additional_math.Matrix.scale(*input)
-    r = [r[0], r[1], r[2]]
-    assert r == expected
+    assert r == additional_math.Matrix(expected)
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -141,6 +139,27 @@ def test_vector_add(input, expected):
 
 @pytest.mark.parametrize("input,expected", [
     ( (additional_math.Vector(1, 2),
+       additional_math.Vector(3, 4)),
+       additional_math.Vector(-2, -2) ),
+    ( (additional_math.Vector(1, 2),
+       additional_math.Vector(-3, 4)),
+       additional_math.Vector(4, -2) ),
+
+])
+def test_vector_sub(input, expected):
+    assert (input[0] - input[1]) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( additional_math.Vector(1, 2),
+      additional_math.Vector(-1, -2) )
+])
+def test_vector_neg(input, expected):
+    assert (-input) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(1, 2),
        10),
        additional_math.Vector(10, 20) ),
     ( (additional_math.Vector(7, 8),
@@ -150,6 +169,24 @@ def test_vector_add(input, expected):
 ])
 def test_vector_mul(input, expected):
     assert (input[0] * input[1]) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(1, 2),
+       additional_math.Vector(3, 4)),
+       11 ),
+])
+def test_vector_dot_mul(input, expected):
+    assert (input[0] * input[1]) == expected
+
+
+@pytest.mark.parametrize("input,expected", [
+    ( (additional_math.Vector(1, 2),
+       10),
+       additional_math.Vector(0.1, 0.2) ),
+])
+def test_vector_div(input, expected):
+    assert (input[0] / input[1]) == expected
 
 
 @pytest.mark.parametrize("input,expected", [
