@@ -25,7 +25,7 @@ def get_more_events():
             yield UserQuitEvent()
         elif e.type == SDL_KEYDOWN:
             if e.key.windowID in Window._all:
-                yield KeyPressEvent(Window._all[e.key.windowID], str(SDL_GetKeyName(e.key.keysym.sym), 'UTF-8'))
+                yield KeyPressEvent(Window._all[e.key.windowID], str(SDL_GetKeyName(e.key.keysym.sym), "UTF-8"))
         elif e.type == SDL_KEYUP:
             if e.key.windowID in Window._all:
-                yield KeyReleaseEvent(Window._all[e.key.windowID], str(SDL_GetKeyName(e.key.keysym.sym), 'UTF-8'))
+                yield KeyReleaseEvent(Window._all[e.key.windowID], str(SDL_GetKeyName(e.key.keysym.sym), "UTF-8"))

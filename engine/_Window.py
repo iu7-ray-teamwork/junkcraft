@@ -32,11 +32,11 @@ class Window(metaclass=WindowMeta):
 
     @property
     def title(self):
-        return str(SDL_GetWindowTitle(self._window), 'UTF-8')
+        return str(SDL_GetWindowTitle(self._window), "UTF-8")
 
     @title.setter
     def title(self, title):
-        SDL_SetWindowTitle(self._window, title.encode('UTF-8'))
+        SDL_SetWindowTitle(self._window, title.encode("UTF-8"))
 
     @property
     def size(self):
