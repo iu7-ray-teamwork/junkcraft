@@ -50,7 +50,7 @@ class Matrix:
         self.__rows = rows
 
     def __repr__(self):
-        return "{}({}, {}, {})".format(self.__class__.__name__, *self.__rows)
+        return "{}({})".format(self.__class__.__name__, ', '.join(map(repr, self.__rows)))
 
     @staticmethod
     def translate(dx, dy):
@@ -130,7 +130,7 @@ class Vector:
         self.__y = y
 
     def __repr__(self):
-        return "{}({}, {})".format(self.__class__.__name__, self.__x, self.__y)
+        return "{}({}, {})".format(self.__class__.__name__, repr(self.__x), repr(self.__y))
 
     def __iter__(self):
         yield self.__x
