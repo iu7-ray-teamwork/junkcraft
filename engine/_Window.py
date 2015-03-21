@@ -2,7 +2,7 @@ __all__ = []
 
 from ctypes import *
 
-from ._sdl import *
+from ._SDL import *
 
 class WindowMeta(type):
     @property
