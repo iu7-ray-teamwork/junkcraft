@@ -7,6 +7,10 @@ from ._Image import *
 from ._Image import __all__ as all
 __all__ += all
 
+from ._Surface import *
+from ._Surface import __all__ as all
+__all__ += all
+
 from ._Window import *
 from ._Window import __all__ as all
 __all__ += all

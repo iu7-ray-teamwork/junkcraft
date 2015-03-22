@@ -1,8 +1,10 @@
 __all__ = []
 
+from weakref import *
 from ctypes import *
 
 from ._sdl import *
+from ._Context import *
 
 class WindowMeta(type):
     @property
@@ -11,15 +13,17 @@ class WindowMeta(type):
 
 __all__ += ["Window"]
 class Window(metaclass=WindowMeta):
-    _all = {}
+    _all = WeakValueDictionary()
 
     def __init__(self, **parameters):
-        self._window = SDL_CreateWindow(
+        self._window = window = SDL_CreateWindow(
             b'',
             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
             0, 0,
-            SDL_WINDOW_RESIZABLE
+            SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
         )
+
+        self.__context = lambda: None
 
         self.title = parameters.pop("title", "")
         self.size = parameters.pop("size", (800, 600))
@@ -27,8 +31,17 @@ class Window(metaclass=WindowMeta):
 
         Window._all[SDL_GetWindowID(self._window)] = self
 
-    def __del__(self):
-        SDL_DestroyWindow(self._window)
+        def cleanup(_):
+            SDL_DestroyWindow(window)
+        self.__weakself = ref(self, cleanup)
+
+    @property
+    def _context(self):
+        context = self.__context()
+        if context is None:
+            context = Context(self)
+            self.__context = ref(context)
+        return context
 
     @property
     def title(self):
