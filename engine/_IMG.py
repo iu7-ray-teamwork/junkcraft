@@ -1,6 +1,6 @@
 __all__ = []
 
-from ._SDL import *
+from ._sdl import *
 
 from sdl2.sdlimage import *
 from sdl2.sdlimage import __all__ as all
