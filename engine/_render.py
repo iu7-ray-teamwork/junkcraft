@@ -4,6 +4,8 @@ from weakref import *
 from struct import pack
 
 from ._GL import *
+from .math import *
+
 
 class Texture:
     def __init__(self, context, size, data):
@@ -93,6 +95,18 @@ class Program:
             glDeleteProgram(handle)
         self.__weakself = ref(self, cleanup)
 
+    def get_uniform_location(self, name):
+        result = glGetUniformLocation(self.handle, name)
+        assert result != -1
+        return result
+
+    def get_attribute_location(self, name):
+        result = glGetAttribLocation(self.handle, name)
+        assert result != -1
+        return result
+
+
+
 
 stuff_cache = WeakKeyDictionary()
 
@@ -107,32 +121,33 @@ def get_stuff_for(context, image):
     vertex_shader = r"""
         #version 330
 
-        layout(location = 0) in vec2 XY;
-        layout(location = 1) in vec2 UV;
+        uniform mat3x3 transformation;
 
-        smooth out vec2 uv;
+        in vec2 a_position;
+        in vec2 a_texture_coordinate;
+
+        out vec2 texture_coordinate;
 
         void main()
         {
-            gl_Position = vec4(XY.x, XY.y, 0.0, 1.0);
-            uv = UV;
+            vec3 position = vec3(a_position.xy, 1.0) * transformation;
+            gl_Position = vec4(position.xy / position.z, 0.0, 1.0);
+            texture_coordinate = a_texture_coordinate;
         }
     """
 
     fragment_shader = r"""
         #version 330
-        #extension GL_ARB_explicit_uniform_location : enable
 
-        layout(location = 2) uniform sampler2D img;
+        uniform sampler2D image;
 
-        smooth in vec2 uv;
+        in vec2 texture_coordinate;
 
-        out vec4 color;
+        out vec4 gl_FragColor;
 
         void main()
         {
-            color.rgb = texture(img, uv).rgb;
-            color.a = 1.0;
+            gl_FragColor = vec4(texture(image, texture_coordinate).rgb, 1.0);
         }
     """
 
@@ -141,11 +156,13 @@ def get_stuff_for(context, image):
         Shader(context, GL_FRAGMENT_SHADER, fragment_shader),
     ])
 
+    texture = Texture(context, image.size, image.data)
+
     positions = [
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-        1.0, 1.0,
+        -1.0, -1.0,
+        +1.0, -1.0,
+        -1.0, +1.0,
+        +1.0, +1.0,
     ]
 
     texture_coordinates = [
@@ -155,11 +172,13 @@ def get_stuff_for(context, image):
         1.0, 1.0,
     ]
 
-    texture = Texture(context, image.size, image.data)
-
     vertex_array = VertexArray(context)
-    vertex_array.set_attribute_buffer(0, pack("{}f".format(len(positions)), *positions), 2, GL_FLOAT)
-    vertex_array.set_attribute_buffer(1, pack("{}f".format(len(texture_coordinates)), *texture_coordinates), 2, GL_FLOAT)
+    vertex_array.set_attribute_buffer(
+        program.get_attribute_location("a_position"),
+        pack("{}f".format(len(positions)), *positions), 2, GL_FLOAT)
+    vertex_array.set_attribute_buffer(
+        program.get_attribute_location("a_texture_coordinate"),
+        pack("{}f".format(len(texture_coordinates)), *texture_coordinates), 2, GL_FLOAT)
 
     stuff = texture, program, vertex_array
 
@@ -168,7 +187,7 @@ def get_stuff_for(context, image):
     return stuff
 
 __all__ += ["render"]
-def render(surface, image):
+def render(surface, image, transformation=Matrix.identity):
     context = surface._context
     context.ensure_active()
 
@@ -177,7 +196,10 @@ def render(surface, image):
     glActiveTexture(GL_TEXTURE0)
     glBindTexture(GL_TEXTURE_2D, texture.handle)
     glUseProgram(program.handle)
-    glUniform1i(glGetUniformLocation(program.handle, b"img"), 0)
+    glUniform1i(program.get_uniform_location("image"), 0)
+    glUniformMatrix3fv(
+        program.get_uniform_location("transformation"), 1, True,
+        pack("9f", *(transformation[i, j] for i in range(3) for j in range(3))))
     glBindVertexArray(vertex_array.handle)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
     glBindVertexArray(0)
