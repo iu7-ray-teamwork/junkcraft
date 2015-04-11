@@ -8,9 +8,7 @@ before_install:
   - sudo apt-get update -qq
 install:
   - pip install -e .
-  - sudo pip install -e .
   - pip install -r requirements.txt
-  - sudo pip install -r requirements.txt
   # CMake, require newer version, than in Travis
   - sudo apt-get install libXxf86vm-dev cmake
   # SDL2
@@ -20,4 +18,4 @@ install:
   - ldconfig -n /usr/local/lib
 # command to run tests
 script:
-  - py.test
+  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH; py.test
