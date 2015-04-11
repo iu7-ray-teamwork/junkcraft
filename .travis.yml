@@ -8,13 +8,15 @@ before_install:
   - sudo apt-get update -qq
 install:
   - pip install -e .
+  - sudo pip install -e .
   - pip install -r requirements.txt
+  - sudo pip install -r requirements.txt
   # CMake, require newer version, than in Travis
   - sudo apt-get install libXxf86vm-dev cmake
   # SDL2
   - curl -O http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - tar -xzvf SDL2-2.0.3.tar.gz
-  - (cd SDL2-2.0.3 && ./configure && make && sudo make install)
+  - (cd SDL2-2.0.3 && ./configure && make -j2 && sudo make install)
   - ldconfig -n /usr/local/lib
 # command to run tests
 script:
