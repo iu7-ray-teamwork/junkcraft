@@ -17,11 +17,4 @@ install:
   - (cd SDL2-2.0.3 && ./configure && make && sudo make install)
 # command to run tests
 script:
-    - (cd gfx_cube && cargo build -v)
-    - (cd image && cargo build -v)
-    - (cd paint && cargo build -v)
-    - (cd deform && cargo build -v)
-    - (cd user_input && cargo build -v)
-    - (cd sprite && cargo build -v)
-    - (cd freetype && cargo build -v)
     - py.test
