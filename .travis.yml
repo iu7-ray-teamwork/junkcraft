@@ -9,6 +9,7 @@ before_install:
 install:
   - pip install -e .
   - pip install -r requirements.txt
+  - pip install pep8 --use-mirrors
   # CMake, require newer version, than in Travis
   - sudo apt-get install libXxf86vm-dev cmake
   # SDL2
@@ -16,6 +17,8 @@ install:
   - tar -xzvf SDL2-2.0.3.tar.gz
   - (cd SDL2-2.0.3 && ./configure && make -j2 && sudo make install)
   - ldconfig -n /usr/local/lib
+before_script:
+  - pep8
 # command to run tests
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH; py.test
