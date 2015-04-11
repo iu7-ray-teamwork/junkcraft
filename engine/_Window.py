@@ -3,7 +3,7 @@ __all__ = []
 from weakref import *
 from ctypes import *
 
-from ._sdl import *
+from ._SDL import *
 from ._Context import *
 
 class WindowMeta(type):

@@ -2,7 +2,7 @@ __all__ = []
 
 from collections import namedtuple
 
-from ._sdl import *
+from ._SDL import *
 from ._Window import *
 
 __all__ += ["UserQuitEvent"]
