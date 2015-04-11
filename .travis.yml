@@ -17,4 +17,4 @@ install:
   - (cd SDL2-2.0.3 && ./configure && make && sudo make install)
 # command to run tests
 script:
-    - py.test
+    - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH; py.test
