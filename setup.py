@@ -8,7 +8,7 @@ setup(name='Junkcraft',
       author='Alexey Abakumkin, Roman Inflianskas, Yuri Kilochek',
       author_email='bobrokorm@gmail.com, infroma@gmail.com, yuri.kilochek@gmail.com',
       url='https://github.com/iu7-ray-teamwork/junkcraft',
-      packages=['engine', 'tests'],
+      packages=['engine'],
       )
 
 
