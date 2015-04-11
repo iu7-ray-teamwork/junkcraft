@@ -18,7 +18,7 @@ install:
   - (cd SDL2-2.0.3 && ./configure && make -j2 && sudo make install)
   - ldconfig -n /usr/local/lib
 before_script:
-  - pep8 .
+  - flake8 .
 # command to run tests
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH; py.test
