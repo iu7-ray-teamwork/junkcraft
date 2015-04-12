@@ -22,4 +22,5 @@ before_script:
   - flake8 .
 # command to run tests
 script:
-  - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH; py.test
+  - python3 __main__.py
+  - py.test
