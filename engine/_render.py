@@ -119,7 +119,7 @@ def get_stuff_for(context, image):
     context.ensure_active()
 
     vertex_shader = r"""
-        #version 330
+        #version 140
 
         uniform mat3x3 transformation;
 
@@ -137,7 +137,7 @@ def get_stuff_for(context, image):
     """
 
     fragment_shader = r"""
-        #version 330
+        #version 140
 
         uniform sampler2D image;
 
