@@ -1,5 +1,3 @@
-__all__ = []
-
 from weakref import *
 from struct import pack
 
@@ -17,13 +15,15 @@ class Texture:
         glBindTexture(GL_TEXTURE_2D, handle)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8,
+                     w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data)
         glBindTexture(GL_TEXTURE_2D, 0)
 
         def cleanup(_):
             context.ensure_active()
             glDeleteTextures(1, [handle])
         self.__weakself = ref(self, cleanup)
+
 
 class VertexArray:
     def __init__(self, context):
@@ -58,6 +58,7 @@ class VertexArray:
         self.__buffers[index] = lambda: buffer
         glBindVertexArray(0)
 
+
 class Shader:
     def __init__(self, context, type, source):
         self.context = context
@@ -75,6 +76,7 @@ class Shader:
             context.ensure_active()
             glDeleteShader(handle)
         self.__weakself = ref(self, cleanup)
+
 
 class Program:
     def __init__(self, context, shaders):
@@ -106,9 +108,8 @@ class Program:
         return result
 
 
-
-
 stuff_cache = WeakKeyDictionary()
+
 
 def get_stuff_for(context, image):
     try:
@@ -175,10 +176,12 @@ def get_stuff_for(context, image):
     vertex_array = VertexArray(context)
     vertex_array.set_attribute_buffer(
         program.get_attribute_location("a_position"),
-        pack("{}f".format(len(positions)), *positions), 2, GL_FLOAT)
+        pack("{}f".format(len(positions)), *positions),
+        2, GL_FLOAT)
     vertex_array.set_attribute_buffer(
         program.get_attribute_location("a_texture_coordinate"),
-        pack("{}f".format(len(texture_coordinates)), *texture_coordinates), 2, GL_FLOAT)
+        pack("{}f".format(len(texture_coordinates)), *texture_coordinates),
+        2, GL_FLOAT)
 
     stuff = texture, program, vertex_array
 
@@ -186,7 +189,7 @@ def get_stuff_for(context, image):
 
     return stuff
 
-__all__ += ["render"]
+
 def render(surface, image, transformation=Matrix.identity):
     context = surface._context
     context.ensure_active()
@@ -199,7 +202,8 @@ def render(surface, image, transformation=Matrix.identity):
     glUniform1i(program.get_uniform_location("image"), 0)
     glUniformMatrix3fv(
         program.get_uniform_location("transformation"), 1, True,
-        pack("9f", *(transformation[i, j] for i in range(3) for j in range(3))))
+        pack("9f",
+             *(transformation[i, j] for i in range(3) for j in range(3))))
     glBindVertexArray(vertex_array.handle)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
     glBindVertexArray(0)

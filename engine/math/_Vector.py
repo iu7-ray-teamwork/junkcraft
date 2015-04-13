@@ -1,9 +1,8 @@
-__all__ = []
-
-from numbers import *
+from . import Matrix
 from math import *
+from numbers import *
 
-__all__ += ["Vector"]
+
 class Vector:
     __slots__ = ["__x", "__y"]
 
@@ -14,7 +13,8 @@ class Vector:
         self.__y = y
 
     def __repr__(self):
-        return "{}({}, {})".format(self.__class__.__name__, repr(self.__x), repr(self.__y))
+        return "{}({}, {})".format(
+            self.__class__.__name__, repr(self.__x), repr(self.__y))
 
     def __iter__(self):
         yield self.__x
@@ -37,7 +37,7 @@ class Vector:
 
     @property
     def length2(self):
-        return self.__x*self.__x + self.__y*self.__y
+        return self.__x ** 2 + self.__y ** 2
 
     @property
     def length(self):
@@ -74,9 +74,9 @@ class Vector:
         if isinstance(other, Number):
             return Vector(self.__x * other, self.__y * other)
         if isinstance(other, Matrix):
-            x = self.__x*other[0, 0] + self.__y*other[1, 0] + other[2, 0]
-            y = self.__x*other[0, 1] + self.__y*other[1, 1] + other[2, 1]
-            s = self.__x*other[0, 2] + self.__y*other[1, 2] + other[2, 2]
+            x = self.__x * other[0, 0] + self.__y * other[1, 0] + other[2, 0]
+            y = self.__x * other[0, 1] + self.__y * other[1, 1] + other[2, 1]
+            s = self.__x * other[0, 2] + self.__y * other[1, 2] + other[2, 2]
             return Vector(x / s, y / s)
         assert False
 
@@ -96,6 +96,5 @@ class Vector:
         return self.__x * other.__y - self.__y * other.__x
 
 Vector.zero = Vector(0, 0)
-
 Vector.unit_x = Vector(1, 0)
 Vector.unit_y = Vector(0, 1)

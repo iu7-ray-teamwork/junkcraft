@@ -1,12 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from engine import *
+
 
 if __name__ == "__main__":
     window = Window(title="JunkCraft", size=(800, 600))
     surface = Surface(window)
     image = Image("resources/leaf.png")
-    render(surface, image, math.Matrix.rotate(math.radians(45)) * math.Matrix.translate(0.5, 0))
+    render(surface, image, math.Matrix.rotate(
+        math.radians(45)) * math.Matrix.translate(0.5, 0))
     surface.commit()
 
     while True:
