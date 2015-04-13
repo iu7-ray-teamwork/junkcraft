@@ -16,6 +16,7 @@ install:
   - curl -O http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - tar -xzvf SDL2-2.0.3.tar.gz
   - (cd SDL2-2.0.3 && ./configure && make -j2 && sudo make install)
+  - rm -rf ./SDL2-2.0.3
   - ldconfig -n /usr/local/lib
 before_script:
   - flake8 .
