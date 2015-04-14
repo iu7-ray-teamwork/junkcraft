@@ -1,8 +1,6 @@
-__all__ = []
-
 from ._SDL import *
 
-__all__ += ["Surface"]
+
 class Surface:
     def __init__(self, window):
         self.__window = window
@@ -11,7 +9,3 @@ class Surface:
     def commit(self):
         self._context.ensure_active()
         SDL_GL_SwapWindow(self.__window._window)
-
-
-
-

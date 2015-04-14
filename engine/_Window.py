@@ -1,17 +1,16 @@
-__all__ = []
-
 from weakref import *
 from ctypes import *
 
 from ._SDL import *
 from ._Context import *
 
+
 class WindowMeta(type):
     @property
     def list(cls):
         return list(cls._all.values())
 
-__all__ += ["Window"]
+
 class Window(metaclass=WindowMeta):
     _all = WeakValueDictionary()
 

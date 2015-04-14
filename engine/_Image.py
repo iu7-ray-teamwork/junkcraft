@@ -1,8 +1,6 @@
-__all__ = []
-
 from PIL.Image import open as open_image
 
-__all__ += ["Image"]
+
 class Image:
     def __init__(self, path):
         image = open_image(path).convert("RGBA")
