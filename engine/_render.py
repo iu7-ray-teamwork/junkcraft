@@ -21,7 +21,7 @@ class Texture:
 
         def cleanup(_):
             context.ensure_active()
-            glDeleteTextures(1, [handle])
+            glDeleteTextures(handle)
         self.__weakself = ref(self, cleanup)
 
 
@@ -40,7 +40,7 @@ class VertexArray:
                 glDisableVertexAttribArray(index)
                 glDeleteBuffers(1, [buffer()])
             glBindVertexArray(0)
-            glDeleteVertexArrays(1, [handle])
+            glDeleteVertexArrays(handle)
         self.__weakself = ref(self, cleanup)
 
     def set_attribute_buffer(self, index, data, count, type):
