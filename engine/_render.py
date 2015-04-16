@@ -68,7 +68,9 @@ class Shader:
 
         glShaderSource(handle, source)
         glCompileShader(handle)
-        log = str(glGetShaderInfoLog(handle), "ASCII")
+        log = glGetShaderInfoLog(handle)
+        if log.__class__ == bytes:
+            log = str(log, "ASCII")
         if log:
             raise Exception(log)
 
@@ -88,7 +90,9 @@ class Program:
         for shader in shaders:
             glAttachShader(handle, shader.handle)
         glLinkProgram(handle)
-        log = str(glGetProgramInfoLog(handle), "ASCII")
+        log = glGetProgramInfoLog(handle)
+        if log.__class__ == bytes:
+            log = str(log, "ASCII")
         if log:
             raise Exception(log)
 
