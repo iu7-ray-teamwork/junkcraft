@@ -6,26 +6,29 @@ from numbers import *
 class Vector:
     __slots__ = ["__x", "__y"]
 
-    def __init__(self, x, y):
+    zero = None
+    unit_x = None
+    unit_y = None
+
+    def __init__(self, *args):
+        x, y = args[0] if len(args) == 1 else args
         assert isinstance(x, Real)
         assert isinstance(y, Real)
         self.__x = x
         self.__y = y
 
     def __repr__(self):
-        return "{}({}, {})".format(
-            self.__class__.__name__, repr(self.__x), repr(self.__y))
-
-    def __iter__(self):
-        yield self.__x
-        yield self.__y
+        return "{}({}, {})".format(self.__class__.__name__,
+                                   repr(self.__x), repr(self.__y))
 
     def __getitem__(self, i):
-        if i == 0:
-            return self.__x
-        if i == 1:
-            return self.__y
-        assert False
+        return (self.__x, self.__y)[i]
+
+    def __len__(self):
+        return 2
+
+    def __iter__(self):
+        return iter((self.__x, self.__y))
 
     @property
     def x(self):
