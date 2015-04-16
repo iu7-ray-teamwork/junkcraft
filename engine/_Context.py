@@ -1,15 +1,15 @@
 from weakref import *
 from ._SDL import *
 
+SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3)
+SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3)
+SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE)
+
 
 class Context:
     def __init__(self, window):
         self.__window = window
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3)
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0)
-        SDL_GL_SetAttribute(
-            SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE)
         self.__context = context = SDL_GL_CreateContext(self.__window._window)
 
         def cleanup(_):
