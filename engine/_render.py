@@ -21,7 +21,7 @@ class Texture:
 
         def cleanup(_):
             context.ensure_active()
-            glDeleteTextures(1, [handle])
+            glDeleteTextures(handle)
         self.__weakself = ref(self, cleanup)
 
 
@@ -40,7 +40,7 @@ class VertexArray:
                 glDisableVertexAttribArray(index)
                 glDeleteBuffers(1, [buffer()])
             glBindVertexArray(0)
-            glDeleteVertexArrays(1, [handle])
+            glDeleteVertexArrays(handle)
         self.__weakself = ref(self, cleanup)
 
     def set_attribute_buffer(self, index, data, count, type):
@@ -68,7 +68,9 @@ class Shader:
 
         glShaderSource(handle, source)
         glCompileShader(handle)
-        log = str(glGetShaderInfoLog(handle), "ASCII")
+        log = glGetShaderInfoLog(handle)
+        if log.__class__ == bytes:
+            log = str(log, "ASCII")
         if log:
             raise Exception(log)
 
@@ -88,7 +90,9 @@ class Program:
         for shader in shaders:
             glAttachShader(handle, shader.handle)
         glLinkProgram(handle)
-        log = str(glGetProgramInfoLog(handle), "ASCII")
+        log = glGetProgramInfoLog(handle)
+        if log.__class__ == bytes:
+            log = str(log, "ASCII")
         if log:
             raise Exception(log)
 
@@ -120,7 +124,7 @@ def get_stuff_for(context, image):
     context.ensure_active()
 
     vertex_shader = r"""
-        #version 140
+        #version 130
 
         uniform mat3x3 transformation;
 
@@ -138,7 +142,7 @@ def get_stuff_for(context, image):
     """
 
     fragment_shader = r"""
-        #version 140
+        #version 130
 
         uniform sampler2D image;
 
