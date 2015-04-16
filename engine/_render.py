@@ -148,11 +148,11 @@ def get_stuff_for(context, image):
 
         in vec2 texture_coordinate;
 
-        out vec4 gl_FragColor;
+        out vec4 fragment_color;
 
         void main()
         {
-            gl_FragColor = vec4(texture(image, texture_coordinate).rgb, 1.0);
+            fragment_color = vec4(texture(image, texture_coordinate).rgb, 1.0);
         }
     """
 
