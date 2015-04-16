@@ -27,3 +27,5 @@ before_script:
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   - py.test
+notifications:
+  - email: false
