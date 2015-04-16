@@ -3,6 +3,7 @@ from ctypes import *
 
 from ._SDL import *
 from ._Context import *
+from .math import Vector
 
 
 class WindowMeta(type):
@@ -54,7 +55,7 @@ class Window(metaclass=WindowMeta):
     def size(self):
         w, h = c_int(), c_int()
         SDL_GetWindowSize(self._window, w, h)
-        return w.value, h.value
+        return Vector(w.value, h.value)
 
     @size.setter
     def size(self, size):
