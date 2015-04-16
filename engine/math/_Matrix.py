@@ -90,6 +90,7 @@ Matrix.zero = Matrix(
     (0, 0, 0),
     (0, 0, 0)
 )
+
 Matrix.identity = Matrix(
     (1, 0, 0),
     (0, 1, 0),
@@ -106,8 +107,11 @@ def _transform_origin(m, origin):
 
 
 def _cut3(m, i, j):
-    return tuple(tuple(
-        m[ii][jj] for jj in range(3) if jj != j) for ii in range(3) if ii != i)
+    return tuple(
+        tuple(
+            m[ii][jj] for jj in range(3) if jj != j
+        ) for ii in range(3) if ii != i
+    )
 
 
 def _determinant2(m):
@@ -123,7 +127,11 @@ def _cofactor3(m, i, j):
 
 
 def _cofactors3(m):
-    return tuple(tuple(_cofactor3(m, i, j) for j in range(3)) for i in range(3))
+    return tuple(
+        tuple(
+            _cofactor3(m, i, j) for j in range(3)
+        ) for i in range(3)
+    )
 
 
 def _determinant_from_cofactors3(m, cf):
@@ -138,4 +146,3 @@ def _inverse3(m):
     cf = _cofactors3(m)
     d = _determinant_from_cofactors3(m, cf)
     return tuple(tuple(e / d for e in r) for r in _transpose3(cf))
-
