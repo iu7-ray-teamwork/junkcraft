@@ -26,5 +26,4 @@ before_script:
 # command to run tests
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-  - python3 __main__.py
   - py.test
