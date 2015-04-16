@@ -5,21 +5,10 @@ from ._SDL import *
 from ._GL import *
 from ._Window import *
 
-
-class UserQuitEvent(collections.namedtuple("UserQuitEvent", [])):
-    pass
-
-
-class ResizeEvent(collections.namedtuple("ResizeEvent", ["window", "new_size"])):
-    pass
-
-
-class KeyPressEvent(collections.namedtuple("KeyPressEvent", ["window", "key"])):
-    pass
-
-
-class KeyReleaseEvent(collections.namedtuple("KeyReleaseEvent", ["window", "key"])):
-    pass
+UserQuitEvent = collections.namedtuple("UserQuitEvent", [])
+ResizeEvent = collections.namedtuple("ResizeEvent", ["window", "new_size"])
+KeyPressEvent = collections.namedtuple("KeyPressEvent", ["window", "key"])
+KeyReleaseEvent = collections.namedtuple("KeyReleaseEvent", ["window", "key"])
 
 _key_events = {
     SDL_KEYDOWN: KeyPressEvent,
