@@ -1,5 +1,7 @@
 from collections import namedtuple
+from weakref import ref
 from ._SDL import *
+from ._GL import *
 from ._Window import *
 
 
@@ -31,8 +33,12 @@ def get_more_events():
         elif e.type == SDL_WINDOWEVENT and e.window.windowID in Window._all:
             window = Window._all[e.window.windowID]
             if e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED:
-                new_size = e.window.data1, e.window.data2
-                yield ResizeEvent(window, new_size)
+                w, h = e.window.data1, e.window.data2
+                context = ref(window._context)()
+                if context:
+                    context.ensure_active()
+                    glViewport(0, 0, w, h)
+                yield ResizeEvent(window, (w, h))
         elif e.type in _key_events and e.key.windowID in Window._all:
             event = _key_events[e.type]
             window = Window._all[e.key.windowID]
