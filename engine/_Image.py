@@ -1,10 +1,12 @@
 from PIL.Image import open as open_image
 
+from .math import Vector
+
 
 class Image:
     def __init__(self, path):
         image = open_image(path).convert("RGBA")
-        self.__size = image.size
+        self.__size = Vector(image.size)
         self.__data = image.tobytes("raw")
 
     @property
