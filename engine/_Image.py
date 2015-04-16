@@ -1,12 +1,12 @@
-from PIL.Image import open as open_image
+from PIL.Image import open as PIL_Image_open
 
-from .math import Vector
+from . import math
 
 
 class Image:
     def __init__(self, path):
-        image = open_image(path).convert("RGBA")
-        self.__size = Vector(image.size)
+        image = PIL_Image_open(path).convert("RGBA")
+        self.__size = math.Vector(image.size)
         self.__data = image.tobytes("raw")
 
     @property

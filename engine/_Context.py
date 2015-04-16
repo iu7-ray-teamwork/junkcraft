@@ -1,4 +1,5 @@
-from weakref import *
+import weakref
+
 from ._SDL import *
 
 SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3)
@@ -14,7 +15,7 @@ class Context:
 
         def cleanup(_):
             SDL_GL_DeleteContext(context)
-        self.__weakself = ref(self, cleanup)
+        self.__weakself = weakref.ref(self, cleanup)
 
     def ensure_active(self):
         SDL_GL_MakeCurrent(self.__window._window, self.__context)
