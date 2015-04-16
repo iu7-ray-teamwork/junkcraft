@@ -184,12 +184,15 @@ def _get_stuff_for(context, image):
         2, GL_FLOAT)
     vertex_array.set_attribute_buffer(
         program.get_attribute_location("a_texture_coordinate"),
-        struct.pack("{}f".format(len(texture_coordinates)), *texture_coordinates),
+        struct.pack("{}f".format(len(texture_coordinates)),
+                    *texture_coordinates),
         2, GL_FLOAT)
 
     stuff = texture, program, vertex_array
 
-    _stuff_cache.setdefault(context, weakref.WeakKeyDictionary())[image] = stuff
+    if context not in _stuff_cache:
+        _stuff_cache[context] = weakref.WeakKeyDictionary()
+    _stuff_cache[context][image] = stuff
 
     return stuff
 
@@ -206,7 +209,8 @@ def render(surface, image, transformation=math.Matrix.identity):
     glUniform1i(program.get_uniform_location("image"), 0)
     glUniformMatrix3fv(
         program.get_uniform_location("transformation"), 1, True,
-        struct.pack("9f",
+        struct.pack(
+            "9f",
             *(transformation[i, j] for i in range(3) for j in range(3))))
     glBindVertexArray(vertex_array.handle)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
