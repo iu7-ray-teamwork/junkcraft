@@ -1,9 +1,9 @@
-from weakref import *
+import weakref
 from ctypes import *
 
 from ._SDL import *
 from ._Context import *
-from .math import Vector
+from . import math
 
 
 class WindowMeta(type):
@@ -13,7 +13,7 @@ class WindowMeta(type):
 
 
 class Window(metaclass=WindowMeta):
-    _all = WeakValueDictionary()
+    _all = weakref.WeakValueDictionary()
 
     def __init__(self, **parameters):
         self._window = window = SDL_CreateWindow(
@@ -33,14 +33,14 @@ class Window(metaclass=WindowMeta):
 
         def cleanup(_):
             SDL_DestroyWindow(window)
-        self.__weakself = ref(self, cleanup)
+        self.__weakself = weakref.ref(self, cleanup)
 
     @property
     def _context(self):
         context = self.__context()
         if context is None:
             context = Context(self)
-            self.__context = ref(context)
+            self.__context = weakref.ref(context)
         return context
 
     @property
@@ -55,7 +55,7 @@ class Window(metaclass=WindowMeta):
     def size(self):
         w, h = c_int(), c_int()
         SDL_GetWindowSize(self._window, w, h)
-        return Vector(w.value, h.value)
+        return math.Vector(w.value, h.value)
 
     @size.setter
     def size(self, size):

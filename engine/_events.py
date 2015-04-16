@@ -1,23 +1,24 @@
-from collections import namedtuple
-from weakref import ref
+import collections
+import weakref
+
 from ._SDL import *
 from ._GL import *
 from ._Window import *
 
 
-class UserQuitEvent(namedtuple("UserQuitEvent", [])):
+class UserQuitEvent(collections.namedtuple("UserQuitEvent", [])):
     pass
 
 
-class ResizeEvent(namedtuple("ResizeEvent", ["window", "new_size"])):
+class ResizeEvent(collections.namedtuple("ResizeEvent", ["window", "new_size"])):
     pass
 
 
-class KeyPressEvent(namedtuple("KeyPressEvent", ["window", "key"])):
+class KeyPressEvent(collections.namedtuple("KeyPressEvent", ["window", "key"])):
     pass
 
 
-class KeyReleaseEvent(namedtuple("KeyReleaseEvent", ["window", "key"])):
+class KeyReleaseEvent(collections.namedtuple("KeyReleaseEvent", ["window", "key"])):
     pass
 
 _key_events = {
@@ -35,7 +36,7 @@ def get_more_events():
             window = Window._all[e.window.windowID]
             if e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED:
                 w, h = e.window.data1, e.window.data2
-                context = ref(window._context)()
+                context = weakref.ref(window._context)()
                 if context:
                     context.ensure_active()
                     glViewport(0, 0, w, h)

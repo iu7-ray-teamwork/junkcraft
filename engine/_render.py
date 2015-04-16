@@ -1,11 +1,11 @@
-from weakref import *
-from struct import pack
+import weakref
+import struct
 
 from ._GL import *
-from .math import *
+from . import math
 
 
-class Texture:
+class _Texture:
     def __init__(self, context, size, data):
         self.context = context
         context.ensure_active()
@@ -22,10 +22,10 @@ class Texture:
         def cleanup(_):
             context.ensure_active()
             glDeleteTextures(handle)
-        self.__weakself = ref(self, cleanup)
+        self.__weakself = weakref.ref(self, cleanup)
 
 
-class VertexArray:
+class _VertexArray:
     def __init__(self, context):
         self.context = context
         context.ensure_active()
@@ -41,7 +41,7 @@ class VertexArray:
                 glDeleteBuffers(1, [buffer()])
             glBindVertexArray(0)
             glDeleteVertexArrays(handle)
-        self.__weakself = ref(self, cleanup)
+        self.__weakself = weakref.ref(self, cleanup)
 
     def set_attribute_buffer(self, index, data, count, type):
         self.context.ensure_active()
@@ -59,7 +59,7 @@ class VertexArray:
         glBindVertexArray(0)
 
 
-class Shader:
+class _Shader:
     def __init__(self, context, type, source):
         self.context = context
         context.ensure_active()
@@ -77,10 +77,10 @@ class Shader:
         def cleanup(_):
             context.ensure_active()
             glDeleteShader(handle)
-        self.__weakself = ref(self, cleanup)
+        self.__weakself = weakref.ref(self, cleanup)
 
 
-class Program:
+class _Program:
     def __init__(self, context, shaders):
         self.context = context
         context.ensure_active()
@@ -99,7 +99,7 @@ class Program:
         def cleanup(_):
             context.ensure_active()
             glDeleteProgram(handle)
-        self.__weakself = ref(self, cleanup)
+        self.__weakself = weakref.ref(self, cleanup)
 
     def get_uniform_location(self, name):
         result = glGetUniformLocation(self.handle, name)
@@ -112,12 +112,12 @@ class Program:
         return result
 
 
-stuff_cache = WeakKeyDictionary()
+_stuff_cache = weakref.WeakKeyDictionary()
 
 
-def get_stuff_for(context, image):
+def _get_stuff_for(context, image):
     try:
-        return stuff_cache[context][image]
+        return _stuff_cache[context][image]
     except KeyError:
         pass
 
@@ -156,12 +156,12 @@ def get_stuff_for(context, image):
         }
     """
 
-    program = Program(context, [
-        Shader(context, GL_VERTEX_SHADER, vertex_shader),
-        Shader(context, GL_FRAGMENT_SHADER, fragment_shader),
+    program = _Program(context, [
+        _Shader(context, GL_VERTEX_SHADER, vertex_shader),
+        _Shader(context, GL_FRAGMENT_SHADER, fragment_shader),
     ])
 
-    texture = Texture(context, image.size, image.data)
+    texture = _Texture(context, image.size, image.data)
 
     positions = [
         -1.0, -1.0,
@@ -177,28 +177,28 @@ def get_stuff_for(context, image):
         1.0, 1.0,
     ]
 
-    vertex_array = VertexArray(context)
+    vertex_array = _VertexArray(context)
     vertex_array.set_attribute_buffer(
         program.get_attribute_location("a_position"),
-        pack("{}f".format(len(positions)), *positions),
+        struct.pack("{}f".format(len(positions)), *positions),
         2, GL_FLOAT)
     vertex_array.set_attribute_buffer(
         program.get_attribute_location("a_texture_coordinate"),
-        pack("{}f".format(len(texture_coordinates)), *texture_coordinates),
+        struct.pack("{}f".format(len(texture_coordinates)), *texture_coordinates),
         2, GL_FLOAT)
 
     stuff = texture, program, vertex_array
 
-    stuff_cache.setdefault(context, WeakKeyDictionary())[image] = stuff
+    _stuff_cache.setdefault(context, weakref.WeakKeyDictionary())[image] = stuff
 
     return stuff
 
 
-def render(surface, image, transformation=Matrix.identity):
+def render(surface, image, transformation=math.Matrix.identity):
     context = surface._context
     context.ensure_active()
 
-    texture, program, vertex_array = get_stuff_for(context, image)
+    texture, program, vertex_array = _get_stuff_for(context, image)
 
     glActiveTexture(GL_TEXTURE0)
     glBindTexture(GL_TEXTURE_2D, texture.handle)
@@ -206,8 +206,8 @@ def render(surface, image, transformation=Matrix.identity):
     glUniform1i(program.get_uniform_location("image"), 0)
     glUniformMatrix3fv(
         program.get_uniform_location("transformation"), 1, True,
-        pack("9f",
-             *(transformation[i, j] for i in range(3) for j in range(3))))
+        struct.pack("9f",
+            *(transformation[i, j] for i in range(3) for j in range(3))))
     glBindVertexArray(vertex_array.handle)
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
     glBindVertexArray(0)
