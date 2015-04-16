@@ -25,6 +25,7 @@ _key_events = {
     SDL_KEYUP: KeyReleaseEvent,
 }
 
+
 def get_more_events():
     e = SDL_Event()
     while SDL_PollEvent(e):
