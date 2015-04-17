@@ -20,11 +20,12 @@ class Model:
             image_path = j["image"]
             self.__size = j["size"]
             self.__density = j["density"]
-            self.__contour = j["contour"]
+            contour = j["contour"]
         except KeyError as e:
             raise ValueError(error_str.format(path, "Parameter {0} not found".format(e)))
 
         self.__image = Image(os.path.join(os.path.dirname(path), image_path))
+        self.__contour = tuple(map(math.Vector, contour))
 
     @property
     def image(self):
