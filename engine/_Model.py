@@ -13,22 +13,13 @@ class Model:
         self.__image = Image(os.path.join(os.path.dirname(path), model["image"]))
         self.__size = model["size"]
         self.__density = model["density"]
-        contour = model["contour"]
-        lx, ly = None, None
-        hx, hy = None, None
-        for x, y in contour:
-            if lx is None or x < lx:
-                lx = x
-            elif hx is None or x > hx:
-                hx = x
-            if ly is None or y < ly:
-                ly = y
-            elif hy is None or y > hy:
-                hy = y
-        contour_center = math.Vector(hx + lx, hy + ly) / 2
+        xs, ys = zip(*model["contour"])
+        lx, ly = min(xs), min(ys)
+        hx, hy = max(xs), max(ys)
+        center = math.Vector(hx + lx, hy + ly) / 2
         scale = self.__size / max(hx - lx, hy - ly)
-        self.__from_image = math.Matrix.translate(-contour_center) * math.Matrix.scale(+scale, -scale)
-        self.__contour = tuple(map(lambda cp: math.Vector(cp) * self.__from_image, contour))
+        self.__from_image = math.Matrix.translate(-center) * math.Matrix.scale(+scale, -scale)
+        self.__contour = tuple(map(lambda x, y: math.Vector(x, y) * self.__from_image, xs, ys))
 
     @property
     def image(self):
