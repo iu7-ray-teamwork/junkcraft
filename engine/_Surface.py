@@ -215,9 +215,7 @@ class Surface:
         return self.__context.window.size
 
     def render_image(self, image, to_surface=math.Matrix.identity):
-        w, h = self.size
-
-        to_surface *= math.Matrix.translate(-w / 2, -h / 2) * math.Matrix.scale(2 / w, -2 / h)
+        to_surface *= math.Matrix.translate(-self.size / 2) * math.Matrix.scale(math.Vector(+2, -2) / self.size)
 
         self.__context.ensure_active()
 
