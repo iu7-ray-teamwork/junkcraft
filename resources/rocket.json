@@ -1,6 +1,6 @@
 {
     "image": "rocket.png",
-    "size": 600,
+    "size": 1.0,
     "density": 100,
     "contour": [
         [30, 1],
