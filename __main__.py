@@ -4,12 +4,12 @@ from engine import *
 
 
 if __name__ == "__main__":
-    image = Image("resources/leaf.png")
+    model = Model("resources/leaf.json")
 
     def draw_scene(surface):
-        render(surface, image,
-               math.Matrix.rotate(math.radians(45)) *
-               math.Matrix.translate(0.5, 0))
+        rotate = math.Matrix.rotate(math.radians(45))
+        translate = math.Matrix.translate(0.5, 0)
+        model.render(surface, rotate * translate)
         surface.commit()
 
     window = Window(title="JunkCraft", size=(800, 600))
