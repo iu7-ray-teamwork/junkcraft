@@ -17,7 +17,7 @@ class Model:
 
         try:
             image_path = j["image"]
-            self.__scale = j["scale"]
+            self.__size = j["size"]
             self.__mass_center = j["mass_center"]
             self.__density = j["density"]
             self.__contour = j["contour"]
@@ -31,8 +31,8 @@ class Model:
         return self.__image
 
     @property
-    def scale(self):
-        return self.__scale
+    def size(self):
+        return self.__size
 
     @property
     def mass_center(self):
