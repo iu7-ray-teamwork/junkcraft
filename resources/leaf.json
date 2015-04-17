@@ -1,0 +1,7 @@
+{
+    "image" : "resources/leaf.png",
+    "scale" : 1.0,
+    "mass_center" : [15, 15],
+    "density" : 100,
+    "contour" : [[10, 10], [10, 5]]
+}
