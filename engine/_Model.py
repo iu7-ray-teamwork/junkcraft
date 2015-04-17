@@ -2,30 +2,32 @@ import os.path
 import json
 
 from ._Image import *
-from ._render import *
 from . import math
 
 
 class Model:
     def __init__(self, path):
-        error_str = "Corrupted json file '{0}'. Reason: {1}"
-
         with open(path, "r") as file:
-            try:
-                j = json.load(file)
-            except ValueError as e:
-                raise ValueError(error_str.format(path, str(e)))
+            model = json.load(file)
 
-        try:
-            image_path = j["image"]
-            self.__size = j["size"]
-            self.__density = j["density"]
-            contour = j["contour"]
-        except KeyError as e:
-            raise ValueError(error_str.format(path, "Parameter {0} not found".format(e)))
-
-        self.__image = Image(os.path.join(os.path.dirname(path), image_path))
-        self.__contour = tuple(map(math.Vector, contour))
+        self.__image = Image(os.path.join(os.path.dirname(path), model["image"]))
+        self.__size = model["size"]
+        self.__density = model["density"]
+        self.__contour = tuple(map(math.Vector, model["contour"]))
+        lx, ly = None, None
+        hx, hy = None, None
+        for x, y in self.__contour:
+            if lx is None or x < lx:
+                lx = x
+            elif hx is None or x > hx:
+                hx = x
+            if ly is None or y < ly:
+                ly = y
+            elif hy is None or y > hy:
+                hy = y
+        contour_center = math.Vector(hx + lx, hy + ly) / 2
+        scale = self.__size / max(hx - lx, hy - ly)
+        self.__from_image = math.Matrix.translate(-contour_center) * math.Matrix.scale(+scale, -scale)
 
     @property
     def image(self):
@@ -43,5 +45,5 @@ class Model:
     def contour(self):
         return self.__contour
 
-    def render(self, surface, transform):
-        render(surface, self.__image, transform)
+    def render(self, surface, to_surface):
+        surface.render_image(self.__image, self.__from_image * to_surface)
