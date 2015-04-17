@@ -18,8 +18,7 @@ class Matrix:
         self.__rows = rows
 
     def __repr__(self):
-        return "{}({})".format(
-            self.__class__.__name__, ', '.join(map(repr, self.__rows)))
+        return "{}({})".format(self.__class__.__name__, ', '.join(map(repr, self.__rows)))
 
     @staticmethod
     def translate(*args, origin=None):
@@ -107,11 +106,7 @@ def _transform_origin(m, origin):
 
 
 def _cut3(m, i, j):
-    return tuple(
-        tuple(
-            m[ii][jj] for jj in range(3) if jj != j
-        ) for ii in range(3) if ii != i
-    )
+    return tuple(tuple(m[ii][jj] for jj in range(3) if jj != j) for ii in range(3) if ii != i)
 
 
 def _determinant2(m):
@@ -127,11 +122,7 @@ def _cofactor3(m, i, j):
 
 
 def _cofactors3(m):
-    return tuple(
-        tuple(
-            _cofactor3(m, i, j) for j in range(3)
-        ) for i in range(3)
-    )
+    return tuple(tuple(_cofactor3(m, i, j) for j in range(3)) for i in range(3))
 
 
 def _determinant_from_cofactors3(m, cf):

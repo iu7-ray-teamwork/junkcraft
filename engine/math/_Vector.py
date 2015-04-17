@@ -18,8 +18,7 @@ class Vector:
         self.__y = y
 
     def __repr__(self):
-        return "{}({}, {})".format(self.__class__.__name__,
-                                   repr(self.__x), repr(self.__y))
+        return "{}({}, {})".format(self.__class__.__name__, repr(self.__x), repr(self.__y))
 
     def __getitem__(self, i):
         return (self.__x, self.__y)[i]
