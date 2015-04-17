@@ -151,7 +151,7 @@ def _get_stuff_for(context, image):
 
         void main()
         {
-            fragment_color = vec4(texture(image, texture_coordinate).rgb, 1.0);
+            fragment_color = texture(image, texture_coordinate);
         }
     """
 
@@ -199,6 +199,8 @@ def render(surface, image, transformation=math.Matrix.identity):
 
     texture, program, vertex_array = _get_stuff_for(context, image)
 
+    glEnable(GL_BLEND)
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
     glActiveTexture(GL_TEXTURE0)
     glBindTexture(GL_TEXTURE_2D, texture.handle)
     glUseProgram(program.handle)
@@ -211,3 +213,4 @@ def render(surface, image, transformation=math.Matrix.identity):
     glBindVertexArray(0)
     glUseProgram(0)
     glBindTexture(GL_TEXTURE_2D, 0)
+    glDisable(GL_BLEND)
