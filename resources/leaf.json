@@ -1,5 +1,5 @@
 {
-    "image" : "resources/leaf.png",
+    "image" : "leaf.png",
     "scale" : 1.0,
     "mass_center" : [15, 15],
     "density" : 100,
