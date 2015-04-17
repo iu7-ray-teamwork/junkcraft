@@ -4,18 +4,18 @@ from engine import *
 
 
 if __name__ == "__main__":
-    model = Model("resources/leaf.json")
-
-    def draw_scene(surface):
-        rotate = math.Matrix.rotate(math.radians(45))
-        translate = math.Matrix.translate(0.5, 0)
-        model.render(surface, rotate * translate)
-        surface.commit()
+    image = Image("resources/rocket.png")
 
     window = Window(title="JunkCraft", size=(800, 600))
     surface = Surface(window)
 
-    draw_scene(surface)
+    def draw_scene():
+        surface.render_image(image,
+                             math.Matrix.translate((window.size - image.size) / 2) *
+                             math.Matrix.rotate(math.radians(30), origin=window.size / 2))
+        surface.commit()
+
+    draw_scene()
 
     while True:
         for event in get_more_events():
@@ -23,4 +23,4 @@ if __name__ == "__main__":
                 exit()
             elif event.__class__ == ResizeEvent:
                 if event.window == window:
-                    draw_scene(surface)
+                    draw_scene()
