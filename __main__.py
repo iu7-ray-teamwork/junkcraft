@@ -9,14 +9,20 @@ if __name__ == "__main__":
     window = Window(title="JunkCraft", size=(800, 600))
     surface = Surface(window)
 
-    def draw_scene():
-        model.render(surface, math.Matrix.translate(window.size / 2))
-        # surface.render_image(image,
-        #                      math.Matrix.translate((window.size - image.size) / 2) *
-        #                      math.Matrix.rotate(math.radians(30), origin=window.size / 2))
+    scene = Scene()
+    scene.objects.add(Object(model))
+    scene.objects.add(Object(
+        model, math.Matrix.scale(2) * math.Matrix.rotate(math.radians(30)) * math.Matrix.translate(3, 2)))
+    scene.objects.add(Object(
+        model, math.Matrix.scale(1.5) * math.Matrix.rotate(math.radians(-70)) * math.Matrix.translate(-1, -2)))
+
+    viewport = Viewport(math.Matrix.scale(5))
+
+    def render():
+        scene.render(surface, viewport)
         surface.commit()
 
-    draw_scene()
+    render()
 
     while True:
         for event in get_more_events():
@@ -24,4 +30,4 @@ if __name__ == "__main__":
                 exit()
             elif event.__class__ == ResizeEvent:
                 if event.window == window:
-                    draw_scene()
+                    render()
