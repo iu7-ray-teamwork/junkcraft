@@ -46,7 +46,10 @@ class Matrix:
     @staticmethod
     def scale(*args, origin=None):
         if len(args) == 1:
-            kx, ky = args[0]
+            try:
+                kx, ky = args[0]
+            except TypeError:
+                kx, ky = args[0], args[0]
         else:
             kx, ky = args
         m = Matrix(
