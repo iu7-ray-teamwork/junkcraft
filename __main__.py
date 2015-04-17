@@ -9,7 +9,7 @@ if __name__ == "__main__":
     def draw_scene(surface):
         rotate = math.Matrix.rotate(math.radians(45))
         translate = math.Matrix.translate(0.5, 0)
-        model.render(surface, rotate*translate)
+        model.render(surface, rotate * translate)
         surface.commit()
 
     window = Window(title="JunkCraft", size=(800, 600))
