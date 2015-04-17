@@ -16,7 +16,7 @@ class Model:
         try:
             self.__scale = j["scale"]
             self.__mass_center = j["mass_center"]
-            self.__sprite_path = j["sprite"]
+            self.__image_path = j["image"]
             self.__density = j["density"]
             self.__contour = j["contour"]
         except KeyError as e:
@@ -24,7 +24,7 @@ class Model:
                 error_str.format(path, "Parameter {0} not found".format(e))
             )
 
-        self.__sprite = Image(self.__sprite_path)
+        self.__image = Image(self.__image_path)
 
     @property
     def scale(self):
@@ -43,7 +43,7 @@ class Model:
         return self.__contour
 
     @property
-    def sprite(self):
+    def image(self):
         return self.__sprite
 
     def render(self, surface, transform):
