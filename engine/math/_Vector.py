@@ -1,6 +1,7 @@
-from . import Matrix
 from math import *
 from numbers import *
+
+from . import Matrix
 
 
 class Vector:
@@ -47,8 +48,7 @@ class Vector:
 
     @property
     def unit(self):
-        l = self.length
-        return Vector(self.__x / l, self.__y / l)
+        return self / self.length
 
     def __eq__(self, other):
         if not isinstance(other, Vector):
@@ -67,29 +67,79 @@ class Vector:
         return Vector(-self.__x, -self.__y)
 
     def __add__(self, other):
-        return Vector(self.__x + other.__x, self.__y + other.__y)
+        if isinstance(other, Real):
+            return Vector(self.__x + other, self.__y + other)
+        if isinstance(other, Vector):
+            return Vector(self.__x + other.__x, self.__y + other.__y)
+        return NotImplemented
+
+    def __radd__(self, other):
+        if isinstance(other, Real):
+            return Vector(other + self.__x, other + self.__y)
+        if isinstance(other, Vector):
+            return Vector(other.__x + self.__x, other.__y + self.__y)
+        return NotImplemented
 
     def __sub__(self, other):
-        return Vector(self.__x - other.__x, self.__y - other.__y)
+        if isinstance(other, Real):
+            return Vector(self.__x - other, self.__y - other)
+        if isinstance(other, Vector):
+            return Vector(self.__x - other.__x, self.__y - other.__y)
+        return NotImplemented
+
+    def __rsub__(self, other):
+        if isinstance(other, Real):
+            return Vector(other - self.__x, other - self.__y)
+        if isinstance(other, Vector):
+            return Vector(other.__x - self.__x, other.__y - self.__y)
+        return NotImplemented
 
     def __mul__(self, other):
-        if isinstance(other, Number):
+        if isinstance(other, Real):
             return Vector(self.__x * other, self.__y * other)
+        if isinstance(other, Vector):
+            return Vector(self.__x * other.__x, self.__y * other.__y)
         if isinstance(other, Matrix):
             x = self.__x * other[0, 0] + self.__y * other[1, 0] + other[2, 0]
             y = self.__x * other[0, 1] + self.__y * other[1, 1] + other[2, 1]
             s = self.__x * other[0, 2] + self.__y * other[1, 2] + other[2, 2]
             return Vector(x / s, y / s)
-        assert False
+        return NotImplemented
 
     def __rmul__(self, other):
-        return Vector(other * self.__x, other * self.__y)
+        if isinstance(other, Real):
+            return Vector(other * self.__x, other * self.__y)
+        if isinstance(other, Vector):
+            return Vector(other.__x * self.__x, other.__y * self.__y)
+        return NotImplemented
 
     def __truediv__(self, other):
-        return Vector(self.__x / other, self.__y / other)
+        if isinstance(other, Real):
+            return Vector(self.__x / other, self.__y / other)
+        if isinstance(other, Vector):
+            return Vector(self.__x / other.__x, other.y / self.__y)
+        return NotImplemented
+
+    def __rtruediv__(self, other):
+        if isinstance(other, Real):
+            return Vector(other / self.__x, other / self.__y)
+        if isinstance(other, Vector):
+            return Vector(other.__x / self.__x, other.__y / self.__y)
+        return NotImplemented
 
     def __floordiv__(self, other):
-        return Vector(self.__x // other, self.__y // other)
+        if isinstance(other, Real):
+            return Vector(self.__x // other, self.__y // other)
+        if isinstance(other, Vector):
+            return Vector(self.__x // other.__x, other.y // self.__y)
+        return NotImplemented
+
+    def __rfloordiv__(self, other):
+        if isinstance(other, Real):
+            return Vector(other // self.__x, other // self.__y)
+        if isinstance(other, Vector):
+            return Vector(other.__x // self.__x, other.__y // self.__y)
+        return NotImplemented
 
     def dot(self, other):
         return self.__x * other.__x + self.__y * other.__y
