@@ -117,7 +117,7 @@ class Vector:
         if isinstance(other, Real):
             return Vector(self.__x / other, self.__y / other)
         if isinstance(other, Vector):
-            return Vector(self.__x / other.__x, other.y / self.__y)
+            return Vector(self.__x / other.__x, self.__y / other.__y)
         return NotImplemented
 
     def __rtruediv__(self, other):
@@ -131,7 +131,7 @@ class Vector:
         if isinstance(other, Real):
             return Vector(self.__x // other, self.__y // other)
         if isinstance(other, Vector):
-            return Vector(self.__x // other.__x, other.y // self.__y)
+            return Vector(self.__x // other.__x, self.__y // other.__y)
         return NotImplemented
 
     def __rfloordiv__(self, other):
