@@ -214,6 +214,10 @@ class Surface:
     def size(self):
         return self.__context.window.size
 
+    def clear(self):
+        self.__context.ensure_active()
+        glClear(GL_COLOR_BUFFER_BIT)
+
     def render_image(self, image, to_surface=math.Matrix.identity):
         to_surface *= math.Matrix.translate(-self.size / 2) * math.Matrix.scale(math.Vector(+2, -2) / self.size)
 

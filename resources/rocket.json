@@ -2,7 +2,7 @@
     "image": "rocket.png",
     "size": 1.0,
     "density": 100,
-    "contour": [
+    "shape": [
         [30, 1],
         [45, 31],
         [42, 31],

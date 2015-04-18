@@ -21,7 +21,7 @@ class Matrix:
         return "{}({})".format(self.__class__.__name__, ', '.join(map(repr, self.__rows)))
 
     @staticmethod
-    def translate(*args, origin=None):
+    def translate(*args):
         if len(args) == 1:
             dx, dy = args[0]
         else:
@@ -33,37 +33,55 @@ class Matrix:
         )
 
     @staticmethod
-    def rotate(angle, *, origin=None):
+    def rotate(angle):
         s = sin(angle)
         c = cos(angle)
-        m = Matrix(
+        return Matrix(
             ( c, +s,  0),
             (-s,  c,  0),
-            (0,   0,  1)
-        )
-        return _transform_origin(m, origin)
-
-    @staticmethod
-    def scale(*args, origin=None):
-        if len(args) == 1:
-            try:
-                kx, ky = args[0]
-            except TypeError:
-                kx, ky = args[0], args[0]
-        else:
-            kx, ky = args
-        m = Matrix(
-            (kx,  0,  0),
-            ( 0, ky,  0),
             ( 0,  0,  1)
         )
-        return _transform_origin(m, origin)
+
+    @staticmethod
+    def scale(*args):
+        if len(args) == 1:
+            try:
+                fx, fy = args[0]
+            except TypeError:
+                fx, fy = args[0], args[0]
+        else:
+            fx, fy = args
+        return Matrix(
+            (fx,  0,  0),
+            ( 0, fy,  0),
+            ( 0,  0,  1)
+        )
 
     def __getitem__(self, ij):
         i, j = ij
         assert 0 <= i <= 2
         assert 0 <= j <= 2
         return self.__rows[i][j]
+
+    @property
+    def translation_delta(self):
+        from ._Vector import Vector
+        dx, dy = self[2, 0], self[2, 1]
+        return Vector(dx, dy)
+
+    @property
+    def rotation_angle(self):
+        s, c = self[0, 1], self[0, 0]
+        return atan2(s, c)
+
+    @property
+    def scaling_factor(self):
+        from ._Vector import Vector
+        a, b = self[0, 0], self[0, 1]
+        c, d = self[1, 0], self[1, 1]
+        kx = copysign(sqrt(a ** 2 + c ** 2), a)
+        ky = copysign(sqrt(b ** 2 + d ** 2), d)
+        return Vector(kx, ky)
 
     def __eq__(self, other):
         if not isinstance(other, Matrix):
@@ -86,6 +104,13 @@ class Matrix:
                 r[i][j] = sum(a[i][k] * b[k][j] for k in range(3))
             r[i] = tuple(r[i])
         return Matrix(*r)
+
+    def about(self, *args):
+        if len(args) == 1:
+            x, y = args[0]
+        else:
+            x, y = args
+        return Matrix.translate(-x, -y) * self * Matrix.translate(+x, +y)
 
 Matrix.zero = Matrix(
     (0, 0, 0),
