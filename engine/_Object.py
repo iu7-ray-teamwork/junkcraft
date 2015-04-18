@@ -20,7 +20,10 @@ class Object:
         self._body.angle = angle
         self._shapes = []
         for convex_polygon in pymunk.util.convexise(pymunk.util.triangulate(shape)):
-            self._shapes.append(pymunk.Poly(self._body, convex_polygon))
+            convex_polygon = pymunk.Poly(self._body, convex_polygon)
+            convex_polygon.elasticity = model.elasticity
+            convex_polygon.friction = model.friction
+            self._shapes.append(convex_polygon)
 
     def apply_force(self, force, point=(0, 0)):
         self._body.apply_force(tuple(force), tuple(point))
