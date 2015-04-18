@@ -1,3 +1,4 @@
 pillow
 PySDL2
 PyOpenGL
+pymunk
