@@ -21,12 +21,12 @@ if __name__ == "__main__":
         scene.add(Object(
             model,
             position=(random.uniform(-5, 5), random.uniform(-5, 5)),
-            angle=random.uniform(0, 2*math.pi),
+            angle=random.uniform(0, 2 * math.pi),
             scale=random.uniform(0.5, 2)))
 
     pressed_keys = set()
 
-    for time_step in time_steps(1/60):
+    for time_step in time_steps(1 / 60):
         for event in get_more_events():
             if event.__class__ == UserQuitEvent:
                 exit()

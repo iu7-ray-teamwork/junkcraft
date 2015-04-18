@@ -79,8 +79,8 @@ class Matrix:
         from ._Vector import Vector
         a, b = self[0, 0], self[0, 1]
         c, d = self[1, 0], self[1, 1]
-        kx = copysign(sqrt(a**2 + c**2), a)
-        ky = copysign(sqrt(b**2 + d**2), d)
+        kx = copysign(sqrt(a ** 2 + c ** 2), a)
+        ky = copysign(sqrt(b ** 2 + d ** 2), d)
         return Vector(kx, ky)
 
     def __eq__(self, other):
