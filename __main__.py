@@ -4,6 +4,7 @@ import random
 
 from engine import *
 
+
 if __name__ == "__main__":
     model = Model("resources/rocket.json")
 
@@ -34,7 +35,6 @@ if __name__ == "__main__":
                 pressed_keys.add(event.key)
             elif event.__class__ == KeyReleaseEvent:
                 pressed_keys.discard(event.key)
-
 
         force = 10
 
