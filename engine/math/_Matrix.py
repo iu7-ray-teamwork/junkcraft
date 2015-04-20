@@ -254,6 +254,16 @@ class Matrix:
         return Matrix(*r)
 
     def about(self, *args):
+        """Transformation relatively point.
+
+        Args:
+            args(tuple of float or float): 2D point in space.
+
+        Returns:
+            (Matrix): Transformation matrix.
+
+        """
+
         if len(args) == 1:
             x, y = args[0]
         else:
@@ -309,7 +319,7 @@ def _determinant2(m):
         (float): deteriminant of given m matrix.
 
     """
-        m(tuple of tuple of float):
+
     return m[0][0] * m[1][1] - m[0][1] * m[1][0]
 
 
