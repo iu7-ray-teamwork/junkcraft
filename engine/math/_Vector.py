@@ -1,3 +1,7 @@
+"""The module handle math vector structure and operations with them.
+
+"""
+
 from math import *
 from numbers import *
 
