@@ -1,3 +1,7 @@
+"""Init engine
+
+"""
+
 from . import math
 
 from ._Image import *

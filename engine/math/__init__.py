@@ -1,3 +1,7 @@
+"""Init math
+
+"""
+
 from math import *
 
 from ._Matrix import *
