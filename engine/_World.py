@@ -3,7 +3,7 @@ import pymunk
 from . import math
 
 
-class Scene:
+class World:
     def __init__(self, damping=0):
         self.__objects = set()
         self.__space = pymunk.Space()
@@ -24,9 +24,9 @@ class Scene:
     def render(self, surface, viewport):
         size = surface.size
         viewport_to_surface = math.Matrix.scale(max(size) * math.Vector(+0.5, -0.5)) * math.Matrix.translate(size / 2)
-        scene_to_surface = ~viewport.to_scene * viewport_to_surface
+        world_to_surface = ~viewport.to_world * viewport_to_surface
         for object in self.__objects:
-            object.render(surface, scene_to_surface)
+            object.render(surface, world_to_surface)
 
     def step(self, time_step):
         self.__space.step(time_step)

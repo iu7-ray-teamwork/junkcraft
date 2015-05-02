@@ -11,17 +11,17 @@ if __name__ == "__main__":
     window = Window(title="JunkCraft", size=(800, 600))
     surface = Surface(window)
 
-    scene = Scene(damping=0.3)
+    world = World(damping=0.3)
 
     player = Object(
         model,
         scale=0.5)
-    scene.add(player)
+    world.add(player)
 
     viewport = Viewport(player, scale=10)
 
     for i in range(random.randint(10, 20)):
-        scene.add(Object(
+        world.add(Object(
             model,
             position=(random.uniform(-5, 5), random.uniform(-5, 5)),
             angle=random.uniform(0, 2 * math.pi),
@@ -40,23 +40,23 @@ if __name__ == "__main__":
 
         force = 10
 
-        pts = player.to_scene
+        ptw = player.to_world
 
-        o = math.Vector.zero * pts
+        o = math.Vector.zero * ptw
 
         if "W" in pressed_keys:
-            player.apply_force(math.Vector(0, +force) * pts - o)
+            player.apply_force(math.Vector(0, +force) * ptw - o)
         if "A" in pressed_keys:
-            player.apply_force(math.Vector(-force, 0) * pts - o)
+            player.apply_force(math.Vector(-force, 0) * ptw - o)
         if "S" in pressed_keys:
-            player.apply_force(math.Vector(0, -force) * pts - o)
+            player.apply_force(math.Vector(0, -force) * ptw - o)
         if "D" in pressed_keys:
-            player.apply_force(math.Vector(+force, 0) * pts - o)
+            player.apply_force(math.Vector(+force, 0) * ptw - o)
 
-        scene.step(time_step)
+        world.step(time_step)
 
         player.reset_forces()
 
         surface.clear()
-        scene.render(surface, viewport)
+        world.render(surface, viewport)
         surface.commit()

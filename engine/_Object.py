@@ -26,17 +26,17 @@ class Object:
             self._shapes.append(convex_polygon)
 
     @property
-    def to_scene(self):
+    def to_world(self):
         return self.__scale * math.Matrix.rotate(self._body.angle) * math.Matrix.translate(self._body.position)
 
     def apply_force(self, force, point=None):
         if point is None:
             self._body.apply_force(tuple(force))
         else:
-            self._body.apply_force(tuple(force), tuple(point - math.Vector.zero * self.to_scene))
+            self._body.apply_force(tuple(force), tuple(point - math.Vector.zero * self.to_world))
 
     def reset_forces(self):
         self._body.reset_forces()
 
-    def render(self, surface, scene_to_surface):
-        self.__model.render(surface, self.to_scene * scene_to_surface)
+    def render(self, surface, world_to_surface):
+        self.__model.render(surface, self.to_world * world_to_surface)

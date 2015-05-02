@@ -7,5 +7,5 @@ class Viewport:
         self.scale = scale
 
     @property
-    def to_scene(self):
-        return math.Matrix.scale(self.scale) * self.object.to_scene
+    def to_world(self):
+        return math.Matrix.scale(self.scale) * self.object.to_world
