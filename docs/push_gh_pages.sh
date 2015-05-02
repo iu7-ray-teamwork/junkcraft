@@ -13,7 +13,7 @@ for module in "engine" "engine._Surface" "engine.math" "engine.math._Vector" "en
   do python -m pydoc -w $module;
 done
 
-cp ../index.html index.html
+cp ../docs/index.html index.html
 
 git add .
 git commit -m "Generated docs"
