@@ -28,7 +28,7 @@ script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   - py.test
 after_success:
-  - bash ./.push_gh_pages.sh
+  - bash docs/push_gh_pages.sh
 notifications:
   - email: false
 env:
