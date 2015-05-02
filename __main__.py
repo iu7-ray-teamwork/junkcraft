@@ -11,12 +11,14 @@ if __name__ == "__main__":
     window = Window(title="JunkCraft", size=(800, 600))
     surface = Surface(window)
 
-    viewport = Viewport(math.Matrix.scale(5))
+    scene = Scene(damping=0.3)
 
-    scene = Scene()
-
-    player = Object(model)
+    player = Object(
+        model,
+        scale=0.5)
     scene.add(player)
+
+    viewport = Viewport(player, scale=10)
 
     for i in range(random.randint(10, 20)):
         scene.add(Object(
@@ -38,14 +40,18 @@ if __name__ == "__main__":
 
         force = 10
 
+        pts = player.to_scene
+
+        o = math.Vector.zero * pts
+
         if "W" in pressed_keys:
-            player.apply_force((0, force))
+            player.apply_force(math.Vector(0, +force) * pts - o)
         if "A" in pressed_keys:
-            player.apply_force((-force, 0))
+            player.apply_force(math.Vector(-force, 0) * pts - o)
         if "S" in pressed_keys:
-            player.apply_force((0, -force))
+            player.apply_force(math.Vector(0, -force) * pts - o)
         if "D" in pressed_keys:
-            player.apply_force((force, 0))
+            player.apply_force(math.Vector(+force, 0) * pts - o)
 
         scene.step(time_step)
 
