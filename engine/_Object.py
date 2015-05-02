@@ -25,12 +25,18 @@ class Object:
             convex_polygon.friction = model.friction
             self._shapes.append(convex_polygon)
 
-    def apply_force(self, force, point=(0, 0)):
-        self._body.apply_force(tuple(force), tuple(point))
+    @property
+    def to_scene(self):
+        return self.__scale * math.Matrix.rotate(self._body.angle) * math.Matrix.translate(self._body.position)
+
+    def apply_force(self, force, point=None):
+        if point is None:
+            self._body.apply_force(tuple(force))
+        else:
+            self._body.apply_force(tuple(force), tuple(point - math.Vector.zero * self.to_scene))
 
     def reset_forces(self):
         self._body.reset_forces()
 
     def render(self, surface, scene_to_surface):
-        to_scene = self.__scale * math.Matrix.rotate(self._body.angle) * math.Matrix.translate(self._body.position)
-        self.__model.render(surface, to_scene * scene_to_surface)
+        self.__model.render(surface, self.to_scene * scene_to_surface)
