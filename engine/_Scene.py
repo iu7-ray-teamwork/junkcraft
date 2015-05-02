@@ -4,9 +4,18 @@ from . import math
 
 
 class Scene:
-    def __init__(self):
+    def __init__(self, damping=0):
         self.__objects = set()
         self.__space = pymunk.Space()
+        self.damping = damping
+
+    @property
+    def damping(self):
+        return 1 - self.__space.damping
+
+    @damping.setter
+    def damping(self, damping):
+        self.__space.damping = 1 - damping
 
     def add(self, object):
         self.__objects.add(object)
