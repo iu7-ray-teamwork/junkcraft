@@ -5,20 +5,21 @@ python:
 before_install:
   - sudo add-apt-repository -y ppa:kalakris/cmake
   - sudo apt-get update -qq
+  - chmod 755 ./.push_gh_pages.sh
 install:
-  # Python libraries
+# Python libraries
   - pip install -e .
   - pip install -r requirements.txt
   - pip install flake8
-  # CMake, require newer version, than in Travis
+# CMake, require newer version, than in Travis
   - sudo apt-get install libXxf86vm-dev cmake
-  # SDL2
+# SDL2
   - curl -O http://www.libsdl.org/release/SDL2-2.0.3.tar.gz
   - tar -xzvf SDL2-2.0.3.tar.gz
-  - (cd SDL2-2.0.3 && ./configure && make -j2 && sudo make install)
+  - "(cd SDL2-2.0.3 && ./configure && make -j2 && sudo make install)"
   - rm -rf ./SDL2-2.0.3
   - ldconfig -n /usr/local/lib
-  # OpenGL check
+# OpenGL check
   - python3 -c "import OpenGL; print(OpenGL.version.__version__)"
 before_script:
   - flake8 .
@@ -26,5 +27,10 @@ before_script:
 script:
   - export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   - py.test
+after_success:
+  - bash ./.push_gh_pages.sh
 notifications:
   - email: false
+env:
+  global:
+  - secure: gEEhiVTYUi160gF5oBYv/l4jbOa+agahTqFf4qvYEeTk4ye9zyItNEOQFcWydDOw8bjxBbGrdF1TljNVlI+8KcXDzWAah2hjrOWQuaBbqVjlNnh3C+FFamxS3MTpWpmNhJ0HPXDoGu4nZgCediz/t89xAG9Eo96UDNLjJUcUSxo=
