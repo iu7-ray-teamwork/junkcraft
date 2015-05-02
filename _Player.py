@@ -3,7 +3,7 @@ import engine
 
 class Player(engine.Object):
     def __init__(self, world, position=(0, 0), angle=0, scale=1):
-        model = engine.Model("resources/player.json")
+        model = engine.Model("resources/fridge.json")
         super().__init__(world, model, position, angle, scale)
         self.__attached_objects = set()
 
