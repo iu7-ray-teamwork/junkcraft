@@ -3,37 +3,30 @@
 import random
 
 from engine import *
+from _Player import *
 
 
 if __name__ == "__main__":
-    model = Model("resources/rocket.json")
-
     window = Window(title="JunkCraft", size=(800, 600))
     surface = Surface(window)
 
     world = World(damping=0.3)
 
-    player = Object(
-        world,
-        model,
-        scale=0.5
-    )
+    player = Player(world)
 
     viewport = Viewport(player, scale=10)
 
+    rocket_model = Model("resources/rocket.json")
     for i in range(random.randint(10, 20)):
         Object(
             world,
-            model,
+            rocket_model,
             position=(random.uniform(-5, 5), random.uniform(-5, 5)),
             angle=random.uniform(0, 2 * math.pi),
             scale=random.uniform(0.5, 2)
         )
 
     pressed_keys = set()
-
-    player_pin_point = None
-    unpin_target = None
 
     for time_step in time_steps(1 / 60):
         for event in get_more_events():
@@ -46,25 +39,25 @@ if __name__ == "__main__":
             elif event.__class__ == MouseButtonPressEvent:
                 position = event.position * ~viewport.world_to(surface)
                 if event.button == "Left":
-                    player_pin_point = position
-                    if world.object_at(player_pin_point) is not player:
-                        player_pin_point = None
+                    attach_old_point = position
+                    attach_old = world.object_at(attach_old_point)
+                    if attach_old is not None:
+                        attach_old_point *= ~attach_old.to_world
                 elif event.button == "Right":
-                    unpin_target = world.object_at(position)
+                    detach_object = world.object_at(position)
             elif event.__class__ == MouseButtonReleaseEvent:
                 if event.button == "Left":
-                    if player_pin_point is not None:
-                        junk_pin_point = event.position * ~viewport.world_to(surface)
-                        junk = world.object_at(junk_pin_point)
-                        if junk is not None:
-                            player.pin(junk, player_pin_point, junk_pin_point)
-                        player_pin_point = None
+                    if attach_old is not None:
+                        attach_old_point *= attach_old.to_world
+                        attach_new_point = event.position * ~viewport.world_to(surface)
+                        attach_new = world.object_at(attach_new_point)
+                        if attach_new is not None:
+                            player.attach(attach_old, attach_new, attach_old_point, attach_new_point)
                 elif event.button == "Right":
-                    if unpin_target is not None:
-                        print(unpin_target)
-                        unpin_target.unpin()
+                    if detach_object is not None:
+                        player.detach(detach_object)
 
-        force = 10
+        force = 100
 
         ptw = player.to_world
 

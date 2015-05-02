@@ -1,4 +1,5 @@
 import pymunk
+import pymunk.constraint
 
 
 class World:
