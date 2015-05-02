@@ -2,5 +2,10 @@ from . import math
 
 
 class Viewport:
-    def __init__(self, to_scene=math.Matrix.identity):
-        self.to_scene = to_scene
+    def __init__(self, object, scale=1):
+        self.object = object
+        self.scale = scale
+
+    @property
+    def to_world(self):
+        return math.Matrix.scale(self.scale) * self.object.to_world
