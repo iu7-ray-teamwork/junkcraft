@@ -1,6 +1,0 @@
-{
-    "image" : "leaf.png",
-    "size" : 1.0,
-    "density" : 100,
-    "contour" : [[10, 10], [10, 5]]
-}
