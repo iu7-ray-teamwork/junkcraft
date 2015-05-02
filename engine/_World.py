@@ -22,9 +22,7 @@ class World:
         self.__space.add(object._body, *object._shapes)
 
     def render(self, surface, viewport):
-        size = surface.size
-        viewport_to_surface = math.Matrix.scale(max(size) * math.Vector(+0.5, -0.5)) * math.Matrix.translate(size / 2)
-        world_to_surface = ~viewport.to_world * viewport_to_surface
+        world_to_surface = viewport.world_to(surface)
         for object in self.__objects:
             object.render(surface, world_to_surface)
 
