@@ -21,7 +21,7 @@ class World:
     def damping(self, damping):
         self._space.damping = 1 - damping
 
-    def object_at(self, position):
+    def get_object_at(self, position):
         shape = self._space.point_query_first(tuple(position))
         if shape is None:
             return None
