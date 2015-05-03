@@ -16,17 +16,20 @@ if __name__ == "__main__":
 
     viewport = engine.Viewport(player, scale=10)
 
-    rocket_model = engine.Model("resources/rocket.json")
-    for i in range(random.randint(10, 20)):
+    asteroid_models = []
+    for i in range(4):
+        asteroid_models.append(engine.Model("resources/asteroid{}.json".format(i)))
+    for i in range(random.randint(20, 50)):
         engine.Object(
             world,
-            rocket_model,
-            position=(random.uniform(-5, 5), random.uniform(-5, 5)),
+            random.choice(asteroid_models),
+            position=(random.uniform(-20, 20), random.uniform(-20, 20)),
             angle=random.uniform(0, 2 * engine.math.pi),
-            scale=random.uniform(0.5, 2)
+            scale=random.uniform(0.1, 2)
         )
 
     pressed_keys = set()
+
 
     for time_step in engine.time_steps(1 / 60):
         for event in engine.get_more_events():

@@ -1,6 +1,6 @@
 {
-    "image": "asteroid2.json",
-    "size": 0.1,
+    "image": "asteroid2.png",
+    "size": 1,
     "density": 150,
     "shape": [
 		[11.703216, 369.07665],
