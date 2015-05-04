@@ -6,7 +6,7 @@ from _Thruster import *
 
 
 class Player(engine.Object):
-    def __init__(self, world, **kwargs):
+    def __init__(self, world, *, thruster_force, **kwargs):
         super().__init__(world, engine.Model("resources/fridge.json"), **kwargs)
 
         self.__pressed_keys = set()
@@ -14,7 +14,7 @@ class Player(engine.Object):
 
         thruster = Thruster(world,
                             position=engine.math.Vector(+0.35, -0.5) * self.to_world,
-                            force=40)
+                            force=thruster_force)
         self.attach(self, thruster,
                     engine.math.Vector.zero * self.to_world * self.to_world,
                     min(thruster.model.shape, key=lambda p: p.x) * thruster.to_world)
@@ -32,7 +32,7 @@ class Player(engine.Object):
 
         thruster = Thruster(world,
                             position=engine.math.Vector(-0.35, -0.5) * self.to_world,
-                            force=40)
+                            force=thruster_force)
         self.attach(self, thruster,
                     engine.math.Vector.zero * self.to_world * self.to_world,
                     max(thruster.model.shape, key=lambda p: p.x) * thruster.to_world)
@@ -51,7 +51,7 @@ class Player(engine.Object):
         thruster = Thruster(world,
                             position=engine.math.Vector(+0.35, +0.5) * self.to_world,
                             angle=engine.math.pi,
-                            force=40)
+                            force=thruster_force)
         self.attach(self, thruster,
                     engine.math.Vector.zero * self.to_world * self.to_world,
                     max(thruster.model.shape, key=lambda p: p.x) * thruster.to_world)
@@ -70,7 +70,7 @@ class Player(engine.Object):
         thruster = Thruster(world,
                             position=engine.math.Vector(-0.35, +0.5) * self.to_world,
                             angle=engine.math.pi,
-                            force=40)
+                            force=thruster_force)
         self.attach(self, thruster,
                     engine.math.Vector.zero * self.to_world * self.to_world,
                     min(thruster.model.shape, key=lambda p: p.x) * thruster.to_world)
@@ -106,6 +106,21 @@ class Player(engine.Object):
         if target in self.compute_pinned_objects():
             self.__wiring[target].add(activation_key)
 
+    def unwire(self, target, activation_key):
+        if target is None:
+            if activation_key is None:
+                self.__wiring.clear()
+            else:
+                for target, activation_keys in self.__wiring:
+                    activation_keys.discard(activation_key)
+        elif target in self.compute_pinned_objects():
+            if activation_key is None:
+                self.__wiring[target].clear()
+            else:
+                self.__wiring[target].discard(activation_key)
+
     def on_after_input(self):
+        pinned_objects = self.compute_pinned_objects()
         for target, activation_keys in self.__wiring.items():
-            target.active = bool(activation_keys & self.__pressed_keys)
+            if target in pinned_objects:
+                target.active = bool(activation_keys & self.__pressed_keys)
