@@ -35,6 +35,8 @@ class World:
             object.render(surface, world_to_surface)
 
     def step(self, time_step):
+        for object in self._objects:
+            object.step(time_step)
         self._space.step(time_step)
         for object in self._objects:
             object._body.reset_forces()

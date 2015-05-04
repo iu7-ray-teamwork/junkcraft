@@ -28,17 +28,14 @@ if __name__ == "__main__":
             scale=random.uniform(0.1, 2)
         )
 
-    pressed_keys = set()
-
-
     for time_step in engine.time_steps(1 / 60):
         for event in engine.get_more_events():
             if event.__class__ == engine.UserQuitEvent:
                 exit()
             elif event.__class__ == engine.KeyPressEvent:
-                pressed_keys.add(event.key)
+                player.on_key_press(event.key)
             elif event.__class__ == engine.KeyReleaseEvent:
-                pressed_keys.discard(event.key)
+                player.on_key_release(event.key)
             elif event.__class__ == engine.MouseButtonPressEvent:
                 position = event.position * ~viewport.world_to(surface)
                 if event.button == "Left":
@@ -62,21 +59,6 @@ if __name__ == "__main__":
                         detach_b = world.get_object_at(position)
                         if detach_b is not None:
                             player.detach(detach_a, detach_b)
-
-        force = 100
-
-        ptw = player.to_world
-
-        o = engine.math.Vector.zero * ptw
-
-        if "W" in pressed_keys:
-            player.apply_force(engine.math.Vector(0, +force) * ptw - o)
-        if "A" in pressed_keys:
-            player.apply_force(engine.math.Vector(-force, 0) * ptw - o)
-        if "S" in pressed_keys:
-            player.apply_force(engine.math.Vector(0, -force) * ptw - o)
-        if "D" in pressed_keys:
-            player.apply_force(engine.math.Vector(+force, 0) * ptw - o)
 
         world.step(time_step)
 

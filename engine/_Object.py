@@ -34,6 +34,8 @@ class Object:
         world._objects.add(self)
         world._space.add(self._body, *self._shapes)
 
+        self.active = False
+
     @property
     def world(self):
         return self.__world()
@@ -81,3 +83,6 @@ class Object:
 
     def render(self, surface, world_to_surface):
         self.__model.render(surface, self.to_world * world_to_surface)
+
+    def step(self, time_step):
+        pass
