@@ -4,7 +4,6 @@ import engine
 class Player(engine.Object):
     def __init__(self, world, **kwargs):
         super().__init__(world, engine.Model("resources/fridge.json"), **kwargs)
-        self.__attached_objects = set()
 
     def attach(self, a, b, a_point, b_point):
         pinned_objects = self.compute_pinned_objects()
