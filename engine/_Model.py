@@ -11,7 +11,11 @@ class Model:
         with open(path, "r") as file:
             model = json.load(file)
 
-        self.__image = Image(os.path.join(os.path.dirname(path), model["image"]))
+        self.__images = {}
+        if model["image"].__class__ == str:
+            model["image"] = {"default": model["image"]}
+        for state, image_path in model["image"].items():
+            self.__images[state] = Image(os.path.join(os.path.dirname(path), image_path))
         self.__density = model.get("density", 1.0)
         self.__elasticity = model.get("elasticity", 0.0)
         self.__friction = model.get("friction", 0.0)
@@ -29,10 +33,6 @@ class Model:
         self.__shape = tuple(map(lambda x, y: math.Vector(x, y) * self.__from_image, xs, ys))
 
     @property
-    def image(self):
-        return self.__image
-
-    @property
     def density(self):
         return self.__density
 
@@ -48,5 +48,5 @@ class Model:
     def shape(self):
         return self.__shape
 
-    def render(self, surface, to_surface):
-        surface.render_image(self.__image, self.__from_image * to_surface)
+    def render(self, surface, to_surface, state="default"):
+        surface.render_image(self.__images[state], self.__from_image * to_surface)

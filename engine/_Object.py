@@ -34,6 +34,8 @@ class Object:
         world._objects.add(self)
         world._space.add(self._body, *self._shapes)
 
+        self.active = False
+
     @property
     def world(self):
         return self.__world()
@@ -51,6 +53,9 @@ class Object:
             self._body.apply_force(tuple(force))
         else:
             self._body.apply_force(tuple(force), tuple(point - math.Vector.zero * self.to_world))
+
+    def reset_forces(self):
+        self._body.reset_forces()
 
     def pin(self, other, self_point, other_point):
         self_point = tuple(math.Vector(self_point) * ~self.to_world)
@@ -81,3 +86,12 @@ class Object:
 
     def render(self, surface, world_to_surface):
         self.__model.render(surface, self.to_world * world_to_surface)
+
+    def on_after_input(self):
+        pass
+
+    def on_before_physics(self):
+        pass
+
+    def on_after_physics(self):
+        pass

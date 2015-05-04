@@ -34,7 +34,17 @@ class World:
         for object in self._objects:
             object.render(surface, world_to_surface)
 
-    def step(self, time_step):
-        self._space.step(time_step)
+    def after_input(self):
         for object in self._objects:
-            object._body.reset_forces()
+            object.on_after_input()
+
+    def before_physics(self):
+        for object in self._objects:
+            object.on_before_physics()
+
+    def physics(self, time_step):
+        self._space.step(time_step)
+
+    def after_physics(self):
+        for object in self._objects:
+            object.on_after_physics()

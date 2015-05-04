@@ -2,9 +2,21 @@ from . import math
 
 
 class Viewport:
-    def __init__(self, object, scale=1):
+    def __init__(self, object, *, min_scale, max_scale, scale=None):
         self.object = object
-        self.scale = scale
+        self.__min_scale = min_scale
+        self.__max_scale = max_scale
+        if scale is None:
+            scale = math.sqrt(min_scale * max_scale)
+        self.__scale = scale
+
+    @property
+    def scale(self):
+        return self.__scale
+
+    @scale.setter
+    def scale(self, scale):
+        self.__scale = math.clamp(self.__min_scale, scale, self.__max_scale)
 
     def world_to(self, surface):
         size = surface.size
