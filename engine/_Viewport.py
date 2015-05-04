@@ -6,7 +6,9 @@ class Viewport:
         self.object = object
         self.__min_scale = min_scale
         self.__max_scale = max_scale
-        self.__scale = math.sqrt(min_scale * max_scale)
+        if scale is None:
+            scale = math.sqrt(min_scale * max_scale)
+        self.__scale = scale
 
     @property
     def scale(self):
