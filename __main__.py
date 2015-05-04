@@ -23,9 +23,9 @@ if __name__ == "__main__":
         asteroid_models.append(engine.Model("resources/asteroid{}.json".format(i)))
     for i in range(random.randint(20, 50)):
         engine.Object(world, random.choice(asteroid_models),
-              position=(random.uniform(-20, 20), random.uniform(-20, 20)),
-              angle=random.uniform(0, 2 * engine.math.pi),
-              scale=random.uniform(0.1, 2))
+                      position=(random.uniform(-20, 20), random.uniform(-20, 20)),
+                      angle=random.uniform(0, 2 * engine.math.pi),
+                      scale=random.uniform(0.1, 2))
 
     for i in range(random.randint(10, 20)):
         scale = random.uniform(1, 3)
@@ -33,7 +33,7 @@ if __name__ == "__main__":
                  position=(random.uniform(-20, 20), random.uniform(-20, 20)),
                  angle=random.uniform(0, 2 * engine.math.pi),
                  scale=scale,
-                 force=40*scale)
+                 force=40 * scale)
 
     attach_a_point = None
     attach_a = None
