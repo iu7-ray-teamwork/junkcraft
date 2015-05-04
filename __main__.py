@@ -16,7 +16,9 @@ if __name__ == "__main__":
     player = Player(world,
                     thruster_force=40)
 
-    viewport = engine.Viewport(player, scale=10)
+    viewport = engine.Viewport(player,
+                               min_scale=5,
+                               max_scale=50)
 
     asteroid_models = []
     for i in range(4):
@@ -58,6 +60,10 @@ if __name__ == "__main__":
                             player.unwire(None if wire_target is player else wire_target, event.key)
                         elif wire_target is not player:
                             player.wire(wire_target, event.key)
+                elif event.key == "PageUp":
+                    viewport.scale *= 1.5
+                elif event.key == "PageDown":
+                    viewport.scale /= 1.5
                 else:
                     player.on_key_press(event.key)
             elif event.__class__ == engine.KeyReleaseEvent:
