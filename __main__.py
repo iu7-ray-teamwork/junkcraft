@@ -60,7 +60,11 @@ if __name__ == "__main__":
                         if detach_b is not None:
                             player.detach(detach_a, detach_b)
 
-        world.step(time_step)
+        world.after_input()
+
+        world.before_physics()
+        world.physics(time_step)
+        world.after_physics()
 
         surface.clear()
         world.render(surface, viewport)
