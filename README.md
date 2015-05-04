@@ -3,7 +3,7 @@
 
 Игра, в которой летает космический корабль.
 
-![alt text](http://s16.postimg.org/q1ol9tsgj/image.png "screenshot")
+![alt text](http://www.pixentral.com/pics/18hGcIyDLW6G0vn1Xe2ORzBAKdBd20.png "screenshot")
 
 ## Разработчики
 * Абакумкин Алексей
